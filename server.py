@@ -7,10 +7,9 @@ from io import BytesIO
 app = Flask(__name__)
 
 # Load the saved model
-loaded_model = tf.keras.models.load_model('dimuthu.keras')
+loaded_model = tf.keras.models.load_model('model.keras')
 
 def preprocess_image(url):
-    # Load image from URL and preprocess it
     response = requests.get(url)
     image = tf.keras.utils.load_img(BytesIO(response.content), target_size=(224, 224))
     input_arr = tf.keras.utils.img_to_array(image)
@@ -19,20 +18,14 @@ def preprocess_image(url):
 
 @app.route('/predict', methods=['GET'])
 def predict():
-    # Get the image URL from the request
     image_url = request.args.get('image_url')
 
     if not image_url:
         return jsonify({'error': 'Image URL not provided'}), 400
 
     try:
-        # Preprocess the image
         input_arr = preprocess_image(image_url)
-
-        # Make predictions
         predictions = loaded_model.predict(input_arr)
-
-        # Get the predicted class
         predicted_class = np.argmax(predictions, axis=1)[0]
 
         return jsonify({'predicted_class': int(predicted_class)})

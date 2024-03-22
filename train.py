@@ -1,12 +1,11 @@
+import tensorflow as tf
 import keras
 from keras.applications.efficientnet_v2 import EfficientNetV2B1
-import numpy as np
 from keras import layers
+import numpy as np
 import pandas as pd
 import os
-import tensorflow as tf
 import glob
-import pandas as pan
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -42,7 +41,7 @@ files = [i for i in glob.glob(image_data + "//*//*")]
 np.random.shuffle(files)
 labels = [os.path.dirname(i).split("/")[-1] for i in files]
 data = zip(files, labels)
-dataframe = pan.DataFrame(data, columns = ["Image", "Label"])
+dataframe = pd.DataFrame(data, columns = ["Image", "Label"])
 dataframe
 
 train_data_dir =image_data
